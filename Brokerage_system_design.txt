@@ -1,0 +1,21 @@
+In order to design brokerage system, I would follow the approach as mentioned below:
+
+1. System will be broken down into multiple microservices to handle different functionalities independently, which will include
+   -> Trade validation service to validate the trade details
+   -> Trade manager service, which will be responsible to create new trade and update the existing trade
+   -> Wallet manager service to manage the balance and to block/release the amount
+   -> Portfolio service to manage share quantities and to block/release the share quantity
+   -> Reporting service, which will be responsible to send acknowledgment with status to trade initiator and will also provide the trade details.
+   
+2. Communication among all these microservices and services to Share Exchange
+   Will integrate with a messaging system e.g. Apache Pulsar, Kafka, Rabbit MQ, etc to implement asynchronus communication.
+   We can also have the webflux implementation in each and every microservices for asynchronus communication
+3. To achieve high availability, we can have Load balancer which will distrubute the incoming trade requests across multiple servers.
+4. We should use containerization for easy deployment and scaling. 
+   Rolling update deployment strategy, which will gradually replaces the old instances with the new ones. 
+   It ensures that the application remains available during the deployment process.
+5. I would prefer database per service approach considering the fact that microservices should be loosely coupled, scalable and independent.
+   We can use SAGA pattern in this case to manage the distributed transactions, It will also ensure that all operations complete successfully or the corresponding compensation transactions are run to undo the work previously completed.
+6. We should use Circuit breaker pattern for Resiliency
+7. we can integrate out microservices with monitoring tools for example prometheus & Grafana, which will use for real-time monitoring of system health, performance.
+8. We must have integration with Sleuth & Zipkin Server for distibuted logging & debugging.
